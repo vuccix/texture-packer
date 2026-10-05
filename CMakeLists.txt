@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.1)
-project(TexturePacker LANGUAGES CXX)
+project(TexturePacker LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD    26)
 set(CMAKE_CXX_EXTENSIONS OFF)
