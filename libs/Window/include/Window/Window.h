@@ -13,14 +13,8 @@ public:
     void swapBuffers() const;
     void clear(float r = 0.39f, float g = 0.58f, float b = 0.93f, float a = 1.f) const;
 
-    std::string getTitle() const;
-    void close() const;
-
     bool shouldClose() const;
 
-    GLFWwindow* getNative() const;
-
 private:
-    GLFWwindow* m_window      = nullptr;
-    std::string m_windowTitle = {};
+    GLFWwindow* m_window = nullptr;
 };

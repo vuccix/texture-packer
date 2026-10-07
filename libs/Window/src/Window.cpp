@@ -11,7 +11,7 @@ void glfwErrorCallback(const int error, const char* description) {
 
 }
 
-Window::Window(const int width, const int height, const char* title) : m_windowTitle(title) {
+Window::Window(const int width, const int height, const char* title) {
     glfwSetErrorCallback(glfwErrorCallback);
     glfwInitHint(GLFW_PLATFORM, GLFW_ANY_PLATFORM);
     if (!glfwInit())
@@ -65,13 +65,6 @@ void Window::clear(const float r, const float g, const float b, const float a) c
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Window::close() const {
-    glfwSetWindowShouldClose(m_window, GLFW_TRUE);
-}
-
 bool Window::shouldClose() const {
     return glfwWindowShouldClose(m_window);
 }
-
-std::string Window::getTitle()    const { return m_windowTitle; }
-GLFWwindow* Window::getNative()   const { return m_window;      }
