@@ -1,6 +1,8 @@
 #include "TexturePacking.h"
+#include <Image/Image.h>
 #include <IO/IO.h>
 #include <omp.h>
+#include <cassert>
 #include <vector>
 #include <mdspan>
 
@@ -30,7 +32,7 @@ void packChannel(Image& image, const Image& texture, const uint32_t channel) {
             pixels[y, x][channel] = tex[y, x][channel];
 }
 
-Image unity(std::array<Image, 3>& textures, const std::array<char, 3>& hasTex, const uint32_t width, const uint32_t height) {
+Image unity(Bundle& b) {
     constexpr Pixel defaultPixel = {
         .r = 0,   // metallic
         .g = 255, // occlusion
@@ -39,26 +41,26 @@ Image unity(std::array<Image, 3>& textures, const std::array<char, 3>& hasTex, c
     };
 
     Image result = {
-        .pixels  = std::vector(width * height, defaultPixel),
-        .width   = width,
-        .height  = height,
+        .pixels  = std::vector(b.width * b.height, defaultPixel),
+        .width   = b.width,
+        .height  = b.height,
     };
 
-    if (hasTex[0])
-        ::packChannel(result, textures[0], RED);   // metallic
+    if (b.metallic.hasTex())
+        ::packChannel(result, b.metallic, RED);   // metallic
 
-    if (hasTex[1])
-        ::packChannel(result, textures[1], GREEN); // occlusion
+    if (b.occlusion.hasTex())
+        ::packChannel(result, b.occlusion, GREEN); // occlusion
 
-    if (hasTex[2]) {
-        ::roughnessToSmoothness(textures[2]);
-        ::packChannel(result, textures[2], ALPHA); // smoothness
+    if (b.roughness.hasTex()) {
+        ::roughnessToSmoothness(b.roughness);
+        ::packChannel(result, b.roughness, ALPHA); // smoothness
     }
 
     return result;
 }
 
-Image orm(const std::array<Image, 3>& textures, const std::array<char, 3>& hasTex, const uint32_t width, const uint32_t height) {
+Image orm(const Bundle& b) {
     constexpr Pixel defaultPixel = {
         .r = 255, // occlusion
         .g = 127, // roughness
@@ -67,47 +69,25 @@ Image orm(const std::array<Image, 3>& textures, const std::array<char, 3>& hasTe
     };
 
     Image result = {
-        .pixels  = std::vector(width * height, defaultPixel),
-        .width   = width,
-        .height  = height,
+        .pixels  = std::vector(b.width * b.height, defaultPixel),
+        .width   = b.width,
+        .height  = b.height,
     };
 
-    if (hasTex[0]) ::packChannel(result, textures[0], BLUE);  // metallic
-    if (hasTex[1]) ::packChannel(result, textures[1], RED);   // occlusion
-    if (hasTex[2]) ::packChannel(result, textures[2], GREEN); // roughness
+    if (b.occlusion.hasTex()) ::packChannel(result, b.occlusion, RED);   // occlusion
+    if (b.roughness.hasTex()) ::packChannel(result, b.roughness, GREEN); // roughness
+    if (b.metallic.hasTex())  ::packChannel(result, b.metallic,  BLUE);  // metallic
 
     return result;
 }
 
 }
 
-void Pack::process(const std::array<fs::path, 3>& paths, const fs::path& outPath, const Format format) {
-    std::array<Image, 3> textures; // 0: metallic, 1: occlusion, 2: roughness
-    std::array<char,  3> hasTex = { false, false, false };
+void Pack::process(Bundle& bundle, const fs::path& outPath, const Format format) {
+    assert(bundle.width > 0 && bundle.height > 0);
+    assert(outPath.empty() == false);
 
-    uint32_t width = 0, height = 0;
-
-    for (size_t i = 0; i < 3; ++i) {
-        if (paths[i].empty())
-            continue;
-
-        textures[i] = IO::load(paths[i]);
-        hasTex[i]   = true;
-
-        if (width == 0 && height == 0) {
-            width  = textures[i].width;
-            height = textures[i].height;
-        }
-        else if (textures[i].width != width || textures[i].height != height)
-            throw std::runtime_error("images have incompatible sizes");
-    }
-
-    if (width == 0 || height == 0)
-        throw std::runtime_error("no image was loaded");
-
-    const Image result = (format == Format::Unity)
-                       ? unity(textures, hasTex, width, height)
-                       : orm(textures, hasTex, width, height);
+    const Image result = (format == Format::Unity) ? ::unity(bundle) : ::orm(bundle);
 
     IO::save(result, outPath);
 }

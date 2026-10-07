@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Image/Image.h>
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -7,7 +8,6 @@ namespace fs = std::filesystem;
 namespace Pack {
 
     enum class Format { Unity, ORM };
-
-    void process(const std::array<fs::path, 3>& paths, const fs::path& outPath, Format format);
+    void process(Bundle& bundle, const fs::path& outPath, Format format);
 
 }
