@@ -2,7 +2,7 @@
 #include "View.h"
 
 int main() {
-    const Window window(600, 300, "Texture Packer");
+    const Window window(600, 255, "Texture Packer");
     View ui;
 
     while (!window.shouldClose()) {
