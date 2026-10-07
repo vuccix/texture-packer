@@ -40,6 +40,14 @@ void IO::save(const Image& image, const fs::path& path) {
         throw std::runtime_error("could not save png");
 }
 
+std::pair<uint32_t, uint32_t> IO::imgInfo(const fs::path& path) {
+    int32_t w, h, _;
+    if (!stbi_info(path.generic_string().c_str(), &w, &h, &_))
+        throw std::runtime_error("could not load");
+
+    return std::make_pair(static_cast<uint32_t>(w), static_cast<uint32_t>(h));
+}
+
 std::optional<fs::path> IO::getPath(const Path pathType) {
     NFD::Guard      nfdGuard;
     NFD::UniquePath outPath;
@@ -61,19 +69,4 @@ std::optional<fs::path> IO::getPath(const Path pathType) {
         return outPath.get();
 
     return std::nullopt;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-uint8_t& Pixel::operator[](const uint32_t channel) {
-    switch (channel) {
-        case 0:  return r;
-        case 1:  return g;
-        case 2:  return b;
-        default: return a;
-    }
-}
-
-uint8_t Pixel::operator[](const uint32_t channel) const {
-    return const_cast<Pixel&>(*this)[channel];
 }
