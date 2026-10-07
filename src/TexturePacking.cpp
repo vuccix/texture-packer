@@ -1,5 +1,5 @@
 #include "TexturePacking.h"
-#include "IO.h"
+#include <IO/IO.h>
 #include <omp.h>
 #include <vector>
 #include <mdspan>

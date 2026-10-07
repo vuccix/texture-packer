@@ -1,18 +1,16 @@
-#include "TexturePacking.h"
-#include <iostream>
-
-std::string full = R"(...)";
-
-std::array<fs::path, 3> paths = {
-    full + R"(...)", // metallic
-    full + R"(...)", // occlusion
-    full + R"(...)", // roughness
-};
-
-fs::path outPath = full + R"(result.png)";
+#include <Window/Window.h>
+#include "View.h"
 
 int main() {
-    Pack::process(paths, outPath, Pack::Format::ORM);
+    const Window window(600, 300, "Texture Packer");
+    View ui;
 
-    std::cout << "done\n";
+    while (!window.shouldClose()) {
+        window.waitEvents();
+
+        ui.draw();
+
+        window.swapBuffers();
+        window.clear();
+    }
 }

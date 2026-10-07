@@ -1,14 +1,13 @@
 add_executable(TexturePacker
         main.cpp
         TexturePacking.cpp
-        IO.cpp
+        View.cpp
 )
 
 target_link_libraries(TexturePacker PRIVATE
-        stb
-        nfd
-        imgui
+        IO
+        Window
         glfw
-        glad
+        imgui
         OpenMP::OpenMP_CXX
 )
