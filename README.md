@@ -1,6 +1,6 @@
 # Texture Packer
 
-A very simple app for packing Metallic, Roughness and Ambient Occlusion texture maps into a single PNG file via a intuitive GUI.
+A very simple tool for packing Metallic, Roughness and Ambient Occlusion texture maps into a single PNG file via a intuitive GUI. Useful for Unity's URP Lit material shaders or other engines which use ORM texture packing.
 
 ## Supported Packing Formats
 
