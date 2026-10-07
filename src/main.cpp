@@ -12,7 +12,7 @@ std::array<fs::path, 3> paths = {
 fs::path outPath = full + R"(result.png)";
 
 int main() {
-    Pack::unity(paths, outPath);
+    Pack::process(paths, outPath, Pack::Format::ORM);
 
     std::cout << "done\n";
 }
