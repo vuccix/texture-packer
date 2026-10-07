@@ -24,6 +24,28 @@ A very simple tool for packing Metallic, Roughness and Ambient Occlusion texture
 | Blue    | Metallic   |
 | Alpha   | not used   |
 
+## How to use
+
+At least one texture map must be provided before being able to create the packed output. Unused maps will be filled with default values which **should not** cause visual artefacts in your games.
+
+Provided image files must be PNGs, JPEGs, TGAs or GIFs. You may provide different file formats for different texture maps. All texture maps **must have the same dimensions**.
+
+```cpp
+Pixel default_Unity_Pixel = {
+    .r = 0,   // metallic
+    .g = 255, // occlusion
+    .b = 0,   // not used
+    .a = 127, // smoothness
+};
+
+Pixel default_ORM_Pixel = {
+    .r = 255, // occlusion
+    .g = 127, // roughness
+    .b = 0,   // metallic
+    .a = 255, // not used
+};
+```
+
 ## How to build
 
 ### Requirements
