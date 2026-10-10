@@ -3,9 +3,23 @@
 #include <stb/stb_image_write.h>
 #include <nfd.hpp>
 #include <cstring>
+#include <array>
+
+namespace {
+
+std::string toLower(const std::string& s) {
+    std::string result = s;
+
+    for (size_t i = 1; i < s.length(); ++i)
+        result[i] = static_cast<char>(std::tolower(s[i]));
+
+    return result;
+}
+
+}
 
 Image IO::load(const fs::path& path) {
-    const std::string& str = path.generic_string();
+    const std::string str = ::toLower(path.generic_string());
     int32_t w, h, _;
 
     uint8_t* data = stbi_load(str.c_str(), &w, &h, &_, 4);
@@ -31,7 +45,7 @@ Image IO::load(const fs::path& path) {
 }
 
 void IO::save(const Image& image, const fs::path& path) {
-    const std::string str = path.generic_string();
+    const std::string str = ::toLower(path.generic_string());
     const     int32_t w   = static_cast<int32_t>(image.width);
     const     int32_t h   = static_cast<int32_t>(image.height);
     constexpr int32_t ch  = 4;
@@ -41,8 +55,10 @@ void IO::save(const Image& image, const fs::path& path) {
 }
 
 std::pair<uint32_t, uint32_t> IO::imgInfo(const fs::path& path) {
+    const std::string str = ::toLower(path.generic_string());
     int32_t w, h, _;
-    if (!stbi_info(path.generic_string().c_str(), &w, &h, &_))
+
+    if (!stbi_info(str.c_str(), &w, &h, &_))
         throw std::runtime_error("could not load");
 
     return std::make_pair(static_cast<uint32_t>(w), static_cast<uint32_t>(h));
@@ -62,8 +78,8 @@ std::optional<fs::path> IO::getPath(const Path pathType) {
 
     // show dialog
     const nfdresult_t result = (pathType == Path::Load)
-                             ? NFD::OpenDialog(outPath, filterItem.data(), filterItem.size())
-                             : NFD::SaveDialog(outPath, filterItem.data(), filterItem.size());
+                             ? NFD::OpenDialog(outPath, filterItem.data(), static_cast<nfdfiltersize_t>(filterItem.size()))
+                             : NFD::SaveDialog(outPath, filterItem.data(), static_cast<nfdfiltersize_t>(filterItem.size()));
 
     if (result == NFD_OKAY)
         return outPath.get();

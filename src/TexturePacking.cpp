@@ -17,8 +17,8 @@ void roughnessToSmoothness(Image& image) {
     const std::mdspan pixels(image.pixels.data(), image.height, image.width);
 
     #pragma omp parallel for schedule(static)
-    for (uint32_t y = 0; y < image.height; ++y)
-        for (uint32_t x = 0; x < image.width; ++x)
+    for (int32_t y = 0; y < static_cast<int32_t>(image.height); ++y)
+        for (int32_t x = 0; x < static_cast<int32_t>(image.width); ++x)
             pixels[y, x].a = static_cast<uint8_t>(255 - pixels[y, x].r);
 }
 
@@ -27,8 +27,8 @@ void packChannel(Image& image, const Image& texture, const uint32_t channel) {
     const std::mdspan tex(texture.pixels.data(), texture.height, texture.width);
 
     #pragma omp parallel for schedule(static)
-    for (uint32_t y = 0; y < image.height; ++y)
-        for (uint32_t x = 0; x < image.width; ++x)
+    for (int32_t y = 0; y < static_cast<int32_t>(image.height); ++y)
+        for (int32_t x = 0; x < static_cast<int32_t>(image.width); ++x)
             pixels[y, x][channel] = tex[y, x][channel];
 }
 
