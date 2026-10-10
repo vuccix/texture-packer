@@ -12,6 +12,9 @@ View::View() {
     ImGui::CreateContext();
     ImGui_ImplGlfw_InitForOpenGL(glfwGetCurrentContext(), true);
     ImGui_ImplOpenGL3_Init("#version 330");
+
+    ImGuiIO& io    = ImGui::GetIO();
+    io.IniFilename = nullptr;
 }
 
 namespace {

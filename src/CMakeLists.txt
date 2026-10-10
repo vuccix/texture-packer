@@ -1,4 +1,4 @@
-add_executable(TexturePacker)
+add_executable(TexturePacker WIN32)
 
 target_sources(TexturePacker
         PRIVATE
