@@ -52,16 +52,15 @@ Pixel default_ORM_Pixel = {
 
 To build this project, you will need:
 
-- A C++26 compatible compiler
-- CMake (version 4.1 or higher)
+- A C++23 compatible compiler (GCC/MinGW, MSVC, Clang)
+- CMake (version 3.20 or higher)
 - OpenGL 3.3
 
 ### Building
 
 ```bash
-mkdir build && cd build
-cmake ..
-cmake --build .
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
 ```
 
 ## Dependencies
@@ -74,4 +73,4 @@ cmake --build .
 
 ---
 
-This project was hand written in C++, no AI slop was used.
+This project was handwritten by me in C++, no AI slop was used.
