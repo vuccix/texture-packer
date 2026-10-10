@@ -11,8 +11,6 @@ set(CMAKE_C_EXTENSIONS         OFF)
 
 include(ProjectWarnings.cmake)
 
-#add_link_options(-fopenmp)
-
 add_subdirectory(external)
 add_subdirectory(libs)
 add_subdirectory(src)
