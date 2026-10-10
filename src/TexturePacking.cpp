@@ -47,14 +47,14 @@ Image unity(Bundle& b) {
     };
 
     if (b.metallic.hasTex())
-        ::packChannel(result, b.metallic, RED);   // metallic
+        ::packChannel(result, b.metallic, ::RED);   // metallic
 
     if (b.occlusion.hasTex())
-        ::packChannel(result, b.occlusion, GREEN); // occlusion
+        ::packChannel(result, b.occlusion, ::GREEN); // occlusion
 
     if (b.roughness.hasTex()) {
         ::roughnessToSmoothness(b.roughness);
-        ::packChannel(result, b.roughness, ALPHA); // smoothness
+        ::packChannel(result, b.roughness, ::ALPHA); // smoothness
     }
 
     return result;
@@ -74,9 +74,9 @@ Image orm(const Bundle& b) {
         .height  = b.height,
     };
 
-    if (b.occlusion.hasTex()) ::packChannel(result, b.occlusion, RED);   // occlusion
-    if (b.roughness.hasTex()) ::packChannel(result, b.roughness, GREEN); // roughness
-    if (b.metallic.hasTex())  ::packChannel(result, b.metallic,  BLUE);  // metallic
+    if (b.occlusion.hasTex()) ::packChannel(result, b.occlusion, ::RED);   // occlusion
+    if (b.roughness.hasTex()) ::packChannel(result, b.roughness, ::GREEN); // roughness
+    if (b.metallic.hasTex())  ::packChannel(result, b.metallic,  ::BLUE);  // metallic
 
     return result;
 }

@@ -12,7 +12,7 @@ void glfwErrorCallback(const int error, const char* description) {
 }
 
 Window::Window(const int width, const int height, const char* title) {
-    glfwSetErrorCallback(glfwErrorCallback);
+    glfwSetErrorCallback(::glfwErrorCallback);
     glfwInitHint(GLFW_PLATFORM, GLFW_ANY_PLATFORM);
     if (!glfwInit())
         throw std::runtime_error("Failed to initialize GLFW");
