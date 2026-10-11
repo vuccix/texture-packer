@@ -33,7 +33,15 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev
+          sudo apt-get install -y \
+            libgl1-mesa-dev \
+            libwayland-dev \
+            libwayland-bin \
+            wayland-protocols \
+            libxkbcommon-dev \
+            libxinerama-dev \
+            libxcursor-dev \
+            libxi-dev
 
       - name: Install OpenMP on macOS
         if: runner.os == 'macOS'
