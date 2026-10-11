@@ -41,7 +41,8 @@ jobs:
             libxkbcommon-dev \
             libxinerama-dev \
             libxcursor-dev \
-            libxi-dev
+            libxi-dev \
+            libxrandr-dev
 
       - name: Install OpenMP on macOS
         if: runner.os == 'macOS'
