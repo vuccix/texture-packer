@@ -13,9 +13,14 @@ set(GLFW_INSTALL        OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(glfw)
 
+# miniz ================================================================================================================
+add_library(miniz STATIC miniz/miniz/miniz.c)
+target_include_directories(miniz PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/miniz)
+
 # stb ==================================================================================================================
 add_library(stb STATIC stb/stb/stb_impl.cpp)
 target_include_directories(stb PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stb)
+target_link_libraries(stb PRIVATE miniz)
 
 # imgui ================================================================================================================
 file(GLOB IMGUI_SRC imgui/ImGui/*.cpp)

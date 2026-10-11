@@ -75,6 +75,7 @@ cmake --build build
 - [GLAD](https://glad.dav1d.de/)
 - [GLFW](https://www.glfw.org/)
 - [Native File Dialog Extended](https://github.com/btzy/nativefiledialog-extended)
+- [miniz](https://github.com/richgel999/miniz)
 - [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h) and [stb_image_write.h](https://github.com/nothings/stb/blob/master/stb_image_write.h)
 
 ---

@@ -50,6 +50,8 @@ void IO::save(const Image& image, const fs::path& path) {
     const     int32_t h   = static_cast<int32_t>(image.height);
     constexpr int32_t ch  = 4;
 
+    stbi_write_png_compression_level = 9;
+
     if (stbi_write_png(str.c_str(), w, h, ch, image.pixels.data(), (w * ch)) == 0)
         throw std::runtime_error("could not save png");
 }
