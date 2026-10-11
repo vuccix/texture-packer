@@ -57,10 +57,11 @@ To build this project, you will need:
 - A C++20 compatible compiler (GCC/MinGW, MSVC, Clang)
 - CMake (version 3.20 or higher)
 - OpenGL 3.3
-
-
-- GTK 3, Wayland and X11 development files **if on Linux**
-- OpenMP runtime **if on macOS**
+- Linux:
+  - GTK 3, Wayland and X11 development files
+  - Clang OpenMP development package
+- macOS:
+  - OpenMP runtime
 
 ### Building
 
