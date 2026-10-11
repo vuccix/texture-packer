@@ -1,5 +1,7 @@
 # Texture Packer
 
+[![CMake CI](https://github.com/vuccix/texture-packer/actions/workflows/ci.yml/badge.svg)](https://github.com/vuccix/texture-packer/actions/workflows/ci.yml)
+
 A very simple tool for packing Metallic, Roughness and Ambient Occlusion texture maps into a single PNG file via a intuitive GUI. Useful for Unity's URP Lit material shaders or other engines which use ORM texture packing.
 
 ## Supported Packing Formats
@@ -52,9 +54,13 @@ Pixel default_ORM_Pixel = {
 
 To build this project, you will need:
 
-- A C++23 compatible compiler (GCC/MinGW, MSVC, Clang)
+- A C++20 compatible compiler (GCC/MinGW, MSVC, Clang)
 - CMake (version 3.20 or higher)
 - OpenGL 3.3
+
+
+- GTK 3, Wayland and X11 development files **if on Linux**
+- OpenMP runtime **if on macOS**
 
 ### Building
 
