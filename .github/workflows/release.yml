@@ -20,17 +20,17 @@ jobs:
             os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
-            executable: myapp
+            executable: TexturePacker
           - name: windows
             os: windows-latest
             c_compiler: cl
             cpp_compiler: cl
-            executable: myapp.exe
+            executable: TexturePacker.exe
           - name: macos
             os: macos-latest
             c_compiler: clang
             cpp_compiler: clang++
-            executable: myapp
+            executable: TexturePacker
 
     steps:
       - uses: actions/checkout@v4
