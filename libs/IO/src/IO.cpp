@@ -50,7 +50,7 @@ void IO::save(const Image& image, const fs::path& path) {
     const     int32_t h   = static_cast<int32_t>(image.height);
     constexpr int32_t ch  = 4;
 
-    stbi_write_png_compression_level = 9;
+    stbi_write_png_compression_level = 3;
 
     if (stbi_write_png(str.c_str(), w, h, ch, image.pixels.data(), (w * ch)) == 0)
         throw std::runtime_error("could not save png");
@@ -78,10 +78,12 @@ std::optional<fs::path> IO::getPath(const Path pathType) {
         nfdfilteritem_t{ "GIF",  "gif"           },
     };
 
+    constexpr auto filterCnt = static_cast<nfdfiltersize_t>(filterItem.size());
+
     // show dialog
     const nfdresult_t result = (pathType == Path::Load)
-                             ? NFD::OpenDialog(outPath, filterItem.data(), static_cast<nfdfiltersize_t>(filterItem.size()))
-                             : NFD::SaveDialog(outPath, filterItem.data(), static_cast<nfdfiltersize_t>(filterItem.size()));
+                             ? NFD::OpenDialog(outPath, filterItem.data(), filterCnt)
+                             : NFD::SaveDialog(outPath, filterItem.data(), filterCnt);
 
     if (result == NFD_OKAY)
         return outPath.get();
