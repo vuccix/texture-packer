@@ -16,6 +16,15 @@ add_subdirectory(glfw)
 # miniz ================================================================================================================
 add_library(miniz STATIC miniz/miniz/miniz.c)
 target_include_directories(miniz PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/miniz)
+target_compile_definitions(miniz PRIVATE
+        MINIZ_NO_STDIO
+        MINIZ_NO_ARCHIVE_APIS
+        MINIZ_NO_ARCHIVE_WRITING_APIS
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_compile_definitions(miniz PRIVATE _POSIX_C_SOURCE=200809L)
+endif()
 
 # stb ==================================================================================================================
 add_library(stb STATIC stb/stb/stb_impl.cpp)
