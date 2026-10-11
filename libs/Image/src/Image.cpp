@@ -16,13 +16,13 @@ uint8_t Pixel::operator[](const uint32_t channel) const {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool Image::hasTex() const {
-    return width > 0 && height > 0;
+    return width > 0 && height > 0 && !pixels.empty();
 }
 
 void Bundle::clear() {
     width = height = 0;
 
-    metallic.pixels.resize(0);
-    occlusion.pixels.resize(0);
-    roughness.pixels.resize(0);
+    metallic.pixels.clear();
+    occlusion.pixels.clear();
+    roughness.pixels.clear();
 }
