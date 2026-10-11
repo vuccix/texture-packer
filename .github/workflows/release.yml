@@ -74,7 +74,12 @@ jobs:
       - name: Stage executable
         shell: bash
         run: |
-          source="build/src/${{ matrix.executable }}"
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            source="build/src/Release/${{ matrix.executable }}"
+          else
+            source="build/src/${{ matrix.executable }}"
+          fi
+
           test -f "$source" || {
             echo "Executable not found: $source"
             find build -type f
