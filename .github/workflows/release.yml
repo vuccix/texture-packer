@@ -1,0 +1,115 @@
+name: CMake Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux
+            os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            executable: myapp
+          - name: windows
+            os: windows-latest
+            c_compiler: cl
+            cpp_compiler: cl
+            executable: myapp.exe
+          - name: macos
+            os: macos-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            executable: myapp
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgl1-mesa-dev \
+            libwayland-dev \
+            libwayland-bin \
+            wayland-protocols \
+            libxkbcommon-dev \
+            libxinerama-dev \
+            libxcursor-dev \
+            libxi-dev \
+            libxrandr-dev \
+            libgtk-3-dev \
+            libomp-dev
+
+      - name: Install OpenMP on macOS
+        if: runner.os == 'macOS'
+        run: brew install libomp
+
+      - name: Set OpenMP location on macOS
+        if: runner.os == 'macOS'
+        run: echo "OpenMP_ROOT=$(brew --prefix libomp)" >> "$GITHUB_ENV"
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+          -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+          -DCMAKE_BUILD_TYPE=Release
+          ${{ runner.os == 'macOS' && format('-DOpenMP_ROOT={0}', env.OpenMP_ROOT) || '' }}
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Stage executable
+        shell: bash
+        run: |
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            source="build/Release/${{ matrix.executable }}"
+          else
+            source="build/${{ matrix.executable }}"
+          fi
+
+          test -f "$source" || {
+            echo "Executable not found: $source"
+            find build -type f
+            exit 1
+          }
+
+          mkdir -p release-assets
+          cp "$source" "release-assets/${{ matrix.name }}-${{ matrix.executable }}"
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: release-assets/*
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download executables
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create release and attach executables
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: release-assets/*
